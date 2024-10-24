@@ -27,8 +27,18 @@ continueBtn.onclick = () => {
 
 let quesCount = 0;
 let quesNum = 1;
+let userScore = 0;
 
 const nextBtn = document.getElementById('nextbtn');
+const resultBox = document.getElementById('resultbox');
+const restartQuiz = document.getElementById('restartquiz');
+const quitQuiz = document.getElementById('quitquiz');
+
+quitQuiz.onclick = () => {
+    window.location.reload();
+}
+
+
 
 //on clicking next button
 nextBtn.onclick = () => {
@@ -37,9 +47,10 @@ nextBtn.onclick = () => {
         quesNum++;
         showQuestions(quesCount);
         questionCounter(quesNum);
+        nextBtn.style.display = "none";
     }else {
         console.log("Questions completed");
-        
+        showResultBox();
     }
     
 }
@@ -71,6 +82,9 @@ function optionSelected(answer) {
     let correctAnswer = questions[quesCount].answer;
     let allOptions = optionList.children.length;
     if(userAnswer == correctAnswer){
+        userScore += 1;
+        console.log(userScore);
+        
         answer.classList.add("correct");
         console.log("Answer is Correct");
         answer.insertAdjacentHTML("beforeend", tickIcon);
@@ -92,6 +106,7 @@ function optionSelected(answer) {
     for (let i = 0; i < allOptions; i++) {
     optionList.children[i].classList.add("disabled");
     }
+    nextBtn.style.display = "block";
 }
 
 
@@ -100,4 +115,24 @@ function questionCounter(index) {
     const quesCounter = document.getElementById('questioncounter');
     let quesCounterTag = '<span><p>' + index + '</p>of<p>' + questions.length + '</p>Questions</span>'
     quesCounter.innerHTML = quesCounterTag;
+}
+
+
+function showResultBox(){
+    infoBox.classList.remove("activeInfo");
+    quizBox.classList.remove("activeQuiz");
+    resultBox.classList.add("activeResult");
+    const scoreText = document.getElementById('scoretext');
+    if(userScore > 3){
+        let scoreTag = '<span>and Congrats! You got only <p>'+ userScore + '</p> out of <p>' + questions.length + '</p></span>'
+        scoreText.innerHTML = scoreTag;
+    }
+    else if(userScore > 1){
+        let scoreTag = '<span>and Nice! You got only <p>'+ userScore + '</p> out of <p>' + questions.length + '</p></span>'
+        scoreText.innerHTML = scoreTag;
+    }
+    else{
+        let scoreTag = '<span>and sorry, You got only <p>'+ userScore + '</p> out of <p>' + questions.length + '</p></span>'
+        scoreText.innerHTML = scoreTag;
+    }
 }
